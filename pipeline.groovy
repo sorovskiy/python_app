@@ -1,19 +1,18 @@
 pipeline {
-agent {
-label any
-}
+    agent any
+
 	stages {
 		stage("git clone") {
 			steps{
-				git changelog: false, poll: false, url: 'https://github.com/sorovskiy/go_app.git'
+				git changelog: false, poll: false, url: 'https://github.com/sorovskiy/python_app.git'
 
 			}
 		}
         stage("build docker image") {
 			steps{
-				docker login -u marseek -p marseek6984
-                docker build -t marseek/python_image .
-                docker push marseek/python_image
+				sh "docker login -u marseek -p marseek6984"
+                sh "docker build -t marseek/python_image ."
+                sh "docker push marseek/python_image"
 			}
 		}
         stage("ssh") {
@@ -26,6 +25,5 @@ label any
                     usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 			}
 		}
-	}
 	}
  }
